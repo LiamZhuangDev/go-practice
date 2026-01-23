@@ -3,11 +3,12 @@ package main
 import (
 	"fmt"
 	calculator "go-practice/basics/calculator"
+	student "go-practice/basics/student"
 )
 
 func main() {
+	// Calculator
 	calc := calculator.NewCalculator()
-
 	sum := calc.Add(10, 5)
 	fmt.Printf("10 + 5 = %.2f\n", sum)
 	fmt.Println("Calculator History:", calc.GetHistory())
@@ -54,4 +55,40 @@ func main() {
 
 	calc.ClearHistory()
 	fmt.Println("Calculator History:", calc.GetHistory())
+
+	// Student Management
+	manager := student.NewManager()
+	student1 := student.Student{Name: "Alice", Age: 20, Grade: "A", ID: 1}
+	student2 := student.Student{Name: "Bob", Age: 22, Grade: "B", ID: 2}
+
+	manager.AddStudent(student1)
+	manager.AddStudent(student2)
+
+	s, err := manager.GetStudentByID(1)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Printf("Retrieved Student: %+v\n", s)
+	}
+
+	err = manager.UpdateStudentGrade(1, "A+")
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		s, _ = manager.GetStudentByID(1)
+		fmt.Printf("Updated Student Grade: %+v\n", s)
+	}
+
+	students := manager.ListStudents()
+	fmt.Printf("All Students: %+v\n", students)
+
+	err = manager.RemoveStudentByID(2)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("Removed Student with ID 2")
+	}
+
+	students = manager.ListStudents()
+	fmt.Printf("All Students: %+v\n", students)
 }
