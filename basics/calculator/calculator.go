@@ -9,6 +9,10 @@ type Calculator struct {
 	history []string
 }
 
+func NewCalculator() *Calculator {
+	return &Calculator{history: []string{}}
+}
+
 func (c *Calculator) Add(a, b float64) float64 {
 	c.history = append(c.history, fmt.Sprintf("%.2f + %.2f = %.2f", a, b, a+b))
 	return a + b

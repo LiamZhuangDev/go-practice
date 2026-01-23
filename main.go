@@ -6,9 +6,9 @@ import (
 )
 
 func main() {
-	calc := calculator.Calculator{}
+	calc := calculator.NewCalculator()
 
-	sum := calc.Add(10, 5) // (&calc).Add(...) compiler will do this automatically
+	sum := calc.Add(10, 5)
 	fmt.Printf("10 + 5 = %.2f\n", sum)
 	fmt.Println("Calculator History:", calc.GetHistory())
 
@@ -26,7 +26,7 @@ func main() {
 	} else {
 		fmt.Printf("10 / 5 = %.2f\n", quotient)
 	}
-	fmt.Println("Calculator History:", calc.GetHistory())
+	fmt.Println("Calculator History:", calc.GetHistory()) // automatic dereferencing of pointer: (*calc).GetHistory()
 
 	quotient, err = calc.Divide(10, 0)
 	if err != nil {
