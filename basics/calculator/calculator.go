@@ -3,6 +3,7 @@ package calculator
 import (
 	"errors"
 	"fmt"
+	"math"
 )
 
 type Calculator struct {
@@ -34,6 +35,12 @@ func (c *Calculator) Divide(a, b float64) (float64, error) {
 	}
 	c.history = append(c.history, fmt.Sprintf("%.2f / %.2f = %.2f", a, b, a/b))
 	return a / b, nil
+}
+
+func (c *Calculator) Modulus(a, b float64) float64 {
+	result := math.Mod(a, b)
+	c.history = append(c.history, fmt.Sprintf("Modulus of %.2f %% %.2f = %.2f", a, b, result))
+	return result
 }
 
 func (c *Calculator) Sum(numbers ...float64) float64 {
