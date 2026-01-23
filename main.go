@@ -35,6 +35,15 @@ func main() {
 		fmt.Printf("10 / 0 = %.2f\n", quotient)
 	}
 
+	numbers := []float64{1, 2, 3, 4, 5}
+	total := calc.Sum(numbers...) // expand this slice into individual arguments
+	fmt.Printf("Sum of %v = %.2f\n", numbers, total)
+	fmt.Println("Calculator History:", calc.GetHistory())
+
+	average := calc.Average(numbers...)
+	fmt.Printf("Average of %v = %.2f\n", numbers, average)
+	fmt.Println("Calculator History:", calc.GetHistory())
+
 	calc.ClearHistory()
 	fmt.Println("Calculator History:", calc.GetHistory())
 }

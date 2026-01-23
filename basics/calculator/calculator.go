@@ -36,6 +36,22 @@ func (c *Calculator) Divide(a, b float64) (float64, error) {
 	return a / b, nil
 }
 
+func (c *Calculator) Sum(numbers ...float64) float64 {
+	total := 0.0
+	for _, num := range numbers {
+		total += num
+	}
+	c.history = append(c.history, fmt.Sprintf("Sum of %v = %.2f", numbers, total))
+	return total
+}
+
+func (c *Calculator) Average(numbers ...float64) float64 {
+	total := c.Sum(numbers...)
+	average := total / float64(len(numbers))
+	c.history = append(c.history, fmt.Sprintf("Average of %v = %.2f", numbers, average))
+	return average
+}
+
 func (c Calculator) GetHistory() []string {
 	return c.history
 }
