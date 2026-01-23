@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	account "go-practice/basics/account"
 	calculator "go-practice/basics/calculator"
 	student "go-practice/basics/student"
 )
@@ -91,4 +92,40 @@ func main() {
 
 	students = manager.ListStudents()
 	fmt.Printf("All Students: %+v\n", students)
+
+	// Account Management
+	accountManager := account.NewManager()
+	acc1 := accountManager.OpenAccount("John Doe")
+	acc2 := accountManager.OpenAccount("Jane Smith")
+
+	err = accountManager.Deposit(acc1.ID, 1000)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		balance, _ := accountManager.GetBalance(acc1.ID)
+		fmt.Printf("Deposited $1000 to %s's account. New Balance: $%.2f\n", acc1.Name, balance)
+	}
+
+	err = accountManager.WithDraw(acc1.ID, 500)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		balance, _ := accountManager.GetBalance(acc1.ID)
+		fmt.Printf("Withdrew $500 from %s's account. New Balance: $%.2f\n", acc1.Name, balance)
+	}
+
+	balance, err := accountManager.GetBalance(3) // non-existing account
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Printf("%s's account balance: $%.2f\n", acc2.Name, balance)
+	}
+
+	err2 := accountManager.WithDraw(acc2.ID, 100) // insufficient funds
+	if err2 != nil {
+		fmt.Println(err2)
+	} else {
+		balance, _ := accountManager.GetBalance(acc2.ID)
+		fmt.Printf("Withdrew $100 from %s's account. New Balance: $%.2f\n", acc2.Name, balance)
+	}
 }
