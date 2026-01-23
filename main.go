@@ -76,7 +76,7 @@ func main() {
 		fmt.Println(err)
 	} else {
 		s, _ = manager.GetStudentByID(1)
-		fmt.Printf("Updated Student Grade: %+v\n", s)
+		fmt.Printf("Updated Student Grade to A+: %+v\n", s)
 	}
 
 	students := manager.ListStudents()

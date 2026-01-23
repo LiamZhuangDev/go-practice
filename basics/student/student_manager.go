@@ -43,9 +43,9 @@ func (m *Manager) GetStudentByID(id int) (Student, error) {
 }
 
 func (m *Manager) UpdateStudentGrade(id int, newGrade string) error {
-	for _, s := range m.students {
-		if s.ID == id {
-			s.Grade = newGrade
+	for i := range m.students {
+		if m.students[i].ID == id {
+			m.students[i].Grade = newGrade
 			return nil
 		}
 	}
