@@ -39,6 +39,10 @@ func main() {
 	fmt.Printf("10 %% 3 = %.2f\n", mod)
 	fmt.Println("Calculator History:", calc.GetHistory())
 
+	pow := calc.Power(2, 3)
+	fmt.Printf("2 ^ 3 = %.2f\n", pow)
+	fmt.Println("Calculator History:", calc.GetHistory())
+
 	numbers := []float64{1, 2, 3, 4, 5}
 	total := calc.Sum(numbers...) // expand this slice into individual arguments
 	fmt.Printf("Sum of %v = %.2f\n", numbers, total)

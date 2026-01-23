@@ -43,6 +43,12 @@ func (c *Calculator) Modulus(a, b float64) float64 {
 	return result
 }
 
+func (c *Calculator) Power(a, b float64) float64 {
+	result := math.Pow(a, b)
+	c.history = append(c.history, fmt.Sprintf("%.2f ^ %.2f = %.2f", a, b, result))
+	return result
+}
+
 func (c *Calculator) Sum(numbers ...float64) float64 {
 	total := 0.0
 	for _, num := range numbers {
