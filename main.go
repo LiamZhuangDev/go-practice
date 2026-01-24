@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	interface_example "go-practice/advanced/interface"
 	account "go-practice/basics/account"
 	calculator "go-practice/basics/calculator"
 	closure "go-practice/basics/closure"
@@ -166,4 +167,51 @@ func main() {
 	if err3 != nil {
 		fmt.Println(err3)
 	}
+
+	// Interface Basis
+	shapes := []interface_example.Shape{
+		interface_example.Rectangle{Width: 10, Height: 5},
+		interface_example.Circle{Radius: 7},
+	}
+
+	for _, shape := range shapes {
+		fmt.Printf("Shape: %T, Area: %.2f, Perimeter: %.2f\n", shape, shape.Area(), shape.Perimeter())
+	}
+
+	// Empty Interface - Example 1
+	var i interface_example.EmptyInterface
+
+	i = 42
+	fmt.Println(interface_example.PrintValue(i))
+
+	i = "Hello, Go!"
+	fmt.Println(interface_example.PrintValue(i))
+
+	i = 3.14
+	fmt.Println(interface_example.PrintValue(i))
+
+	i = struct{ Name string }{Name: "Gopher"}
+	fmt.Println(interface_example.PrintValue(i))
+
+	// Empty Interface - Example 2: JSON parsing with unknown structure
+	// data is of unknown structure, could be anything
+	jsonData := `{
+		"code": 0,
+		"message": "ok",
+		"data": {
+			"id": 101,
+			"name": "Alice",
+			"age": 23
+		}
+	}`
+
+	// Parse incoming JSON with unknown structure using empty interfaces
+	user, err := interface_example.ParseJSON([]byte(jsonData))
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Printf("Parsed User: %+v\n", user)
+
+	// Outgoing Publishing with unknown payload using empty interface
+	interface_example.Publish("UserCreated", user)
 }
