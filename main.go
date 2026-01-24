@@ -4,6 +4,7 @@ import (
 	"fmt"
 	account "go-practice/basics/account"
 	calculator "go-practice/basics/calculator"
+	closure "go-practice/basics/closure"
 	student "go-practice/basics/student"
 )
 
@@ -128,4 +129,34 @@ func main() {
 		balance, _ := accountManager.GetBalance(acc2.ID)
 		fmt.Printf("Withdrew $100 from %s's account. New Balance: $%.2f\n", acc2.Name, balance)
 	}
+
+	// Closure Examples 1 - Counter
+	counter := closure.NewCounter()
+	fmt.Println("Counter:", counter()) // 1
+	fmt.Println("Counter:", counter()) // 2
+	fmt.Println("Counter:", counter()) // 3
+
+	// Closure Examples 2 - UI Handlers
+	btnA := closure.Button{Label: "Button A"}
+	btnB := closure.Button{Label: "Button B"}
+
+	// Set up handlers using struct and method
+	btnAHandler := closure.NewHandler("HandlerA")
+
+	// Set up handlers using closures
+	btnBHandler := closure.MakeHandler("HandlerB")
+
+	// Simulate button clicks
+	btnA.OnClick(btnAHandler.Handle) // method value as function
+	btnB.OnClick(btnBHandler)
+	btnA.OnClick(btnAHandler.Handle)
+	btnB.OnClick(btnBHandler)
+
+	// Closure Examples 3 - Price Strategies
+	originalPrice := 100.0
+
+	discount := closure.DiscountStrategy(0.25) // 25% off
+	coupon := closure.WithCoupon(10.0)         // $10 off
+	final := closure.Combine(discount, coupon)
+	fmt.Printf("Original Price: $%.2f, Final Price after strategies: $%.2f\n", originalPrice, final(originalPrice))
 }
