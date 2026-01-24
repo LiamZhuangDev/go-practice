@@ -5,6 +5,7 @@ import (
 	account "go-practice/basics/account"
 	calculator "go-practice/basics/calculator"
 	closure "go-practice/basics/closure"
+	panic "go-practice/basics/panic"
 	student "go-practice/basics/student"
 )
 
@@ -159,4 +160,10 @@ func main() {
 	coupon := closure.WithCoupon(10.0)         // $10 off
 	final := closure.Combine(discount, coupon)
 	fmt.Printf("Original Price: $%.2f, Final Price after strategies: $%.2f\n", originalPrice, final(originalPrice))
+
+	// Handle panic example
+	err3 := panic.ProcessFile("README.md") // adjust the path as needed
+	if err3 != nil {
+		fmt.Println(err3)
+	}
 }
