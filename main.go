@@ -230,4 +230,10 @@ func main() {
 
 	// Outgoing Publishing with unknown payload using empty interface
 	interface_example.Publish("UserCreated", user)
+
+	// Interface Composition
+	file := &interface_example.File{Name: "example.txt"}
+	data := []byte("Hello, Interface Composition!")
+
+	interface_example.Process(data, file)
 }
