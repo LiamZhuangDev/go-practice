@@ -8,6 +8,7 @@ import (
 	closure "go-practice/basics/closure"
 	panic "go-practice/basics/panic"
 	student "go-practice/basics/student"
+	"sync"
 )
 
 func main() {
@@ -253,4 +254,17 @@ func main() {
 	} else {
 		fmt.Printf("PostgreSQL Query Result: %v\n", result)
 	}
+
+	// Goroutine Basis - WaitGroup example
+	var wg sync.WaitGroup
+
+	for i := range 3 {
+		wg.Add(1)
+		go func(id int) {
+			defer wg.Done()
+			fmt.Printf("Goroutine %d\n", id)
+		}(i)
+	}
+
+	wg.Wait()
 }
