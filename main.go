@@ -193,7 +193,23 @@ func main() {
 	i = struct{ Name string }{Name: "Gopher"}
 	fmt.Println(interface_example.PrintValue(i))
 
-	// Empty Interface - Example 2: JSON parsing with unknown structure
+	// Empty Interface - Type Assertion and Type Switch
+	interface_example.TypeAssertion("A string value")
+	interface_example.TypeAssertion(100)
+
+	i = []int{1, 2, 3}
+	interface_example.TypeSwitch(i)
+
+	i = "A string value"
+	interface_example.TypeSwitch(i)
+
+	i = 100
+	interface_example.TypeSwitch(i)
+
+	i = 3.14
+	interface_example.TypeSwitch(i)
+
+	// Empty Interface - Example 3: JSON parsing with unknown structure
 	// data is of unknown structure, could be anything
 	jsonData := `{
 		"code": 0,

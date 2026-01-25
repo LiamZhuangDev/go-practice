@@ -15,6 +15,29 @@ func PrintValue(v EmptyInterface) string {
 	return fmt.Sprintf("Value: %v", v)
 }
 
+// Type assertion examples
+func TypeAssertion(v EmptyInterface) {
+	str, ok := v.(string)
+	if ok {
+		fmt.Println("v is type of string:", str)
+	} else {
+		fmt.Println("v is NOT type of string")
+	}
+}
+
+func TypeSwitch(v EmptyInterface) {
+	switch v := v.(type) { // Creates a new, inner-scoped variable that shadows the outer one and is automatically typed per case.
+	case int:
+		fmt.Println("v is type of integer:", v)
+	case string:
+		fmt.Println("v is type of string:", v)
+	case []int:
+		fmt.Println("v is type of integer slice:", v)
+	default:
+		fmt.Println("unknown type")
+	}
+}
+
 // Another example for empty interface could be a container for any unknown data in JSON parsing: map[string]interface{}
 // Original JSON:
 // {
@@ -33,7 +56,7 @@ type User struct {
 	Age  int
 }
 
-// Parse incoming JSON with unknown structure using empty interfaces
+// Parse incoming JSON with unknown structure using empty interfaces as boundary adapter
 func ParseJSON(jsonData []byte) (User, error) {
 	var raw map[string]interface{}
 
