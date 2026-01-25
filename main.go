@@ -236,4 +236,21 @@ func main() {
 	data := []byte("Hello, Interface Composition!")
 
 	interface_example.Process(data, file)
+
+	// Interface Polymorphism
+	mysqlDB := &interface_example.MySQL{Connection: "user:pass@tcp(localhost:3306)/dbname"}
+	result, err := interface_example.ExecuteQuery(mysqlDB, "SELECT * FROM users")
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Printf("MySQL Query Result: %v\n", result)
+	}
+
+	postgresDB := &interface_example.PostgreSQL{Connection: "postgres://user:pass@localhost:5432/dbname"}
+	result, err = interface_example.ExecuteQuery(postgresDB, "SELECT * FROM products")
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Printf("PostgreSQL Query Result: %v\n", result)
+	}
 }
