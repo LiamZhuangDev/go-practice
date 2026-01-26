@@ -262,4 +262,9 @@ func main() {
 	goroutine.UnbufferedChannelExample()
 	goroutine.BufferedChannelExample()
 	goroutine.BufferedChannelExample2()
+
+	// Goroutine - Select example
+	goroutine.SelectBasis()
+	goroutine.SelectNonBlockingWithDefault()
+	goroutine.SelectWithTimeout()
 }
