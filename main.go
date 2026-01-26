@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
+	goroutine "go-practice/advanced/goroutine"
 	interface_example "go-practice/advanced/interface"
 	account "go-practice/basics/account"
 	calculator "go-practice/basics/calculator"
 	closure "go-practice/basics/closure"
 	panic "go-practice/basics/panic"
 	student "go-practice/basics/student"
-	"sync"
 )
 
 func main() {
@@ -256,15 +256,8 @@ func main() {
 	}
 
 	// Goroutine Basis - WaitGroup example
-	var wg sync.WaitGroup
+	goroutine.WaitGroupExampe()
 
-	for i := range 3 {
-		wg.Add(1)
-		go func(id int) {
-			defer wg.Done()
-			fmt.Printf("Goroutine %d\n", id)
-		}(i)
-	}
-
-	wg.Wait()
+	// Goroutine - Channel example
+	goroutine.UnbufferedChannelExample()
 }

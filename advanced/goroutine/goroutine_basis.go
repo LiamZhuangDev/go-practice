@@ -4,6 +4,7 @@ package goroutine
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -18,4 +19,22 @@ func sayHello() {
 func demo() {
 	go sayHello()
 	time.Sleep(time.Second)
+}
+
+func WaitGroupExampe() {
+	// “How to wait for all goroutines to finish?”
+	// wg.Add(1) increments the counter by 1
+	// wg.Done() decrements the counter by 1
+	// wg.Wait() blocks until the counter is 0
+	var wg sync.WaitGroup
+
+	for i := range 3 {
+		wg.Add(1)
+		go func(id int) {
+			defer wg.Done()
+			fmt.Printf("Goroutine %d\n", id)
+		}(i) // pass i as argument to avoid closure capture issue
+	}
+
+	wg.Wait()
 }
