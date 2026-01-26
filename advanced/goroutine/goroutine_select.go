@@ -180,3 +180,23 @@ func WorkerGracefulShutdownWithContext() {
 
 	wg.Wait()
 }
+
+// Channel State    Receive blocks?    ok
+// Open, no value   yes                -
+// Open, has value  no                 true
+// Closed           never              false
+func ReadFromClosedChannel() {
+	ch := make(chan int)
+	close(ch)
+
+	select {
+	case val, ok := <-ch:
+		fmt.Println("Value:", val, "Open:", ok) // ok will be false
+	// case val := <-ch:
+	// 	for { // This would cause a infinite loop, as reading from a closed channel always returns the zero value
+	// 		fmt.Println("Value from closed channel:", val)
+	// 	}
+	default:
+		fmt.Println("No value received")
+	}
+}

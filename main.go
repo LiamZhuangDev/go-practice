@@ -270,4 +270,5 @@ func main() {
 	goroutine.FanInChannels()
 	goroutine.WorkerGracefulShutdownWithDoneSignal()
 	goroutine.WorkerGracefulShutdownWithContext()
+	goroutine.ReadFromClosedChannel()
 }
