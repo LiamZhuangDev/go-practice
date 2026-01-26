@@ -272,4 +272,7 @@ func main() {
 	goroutine.WorkerGracefulShutdownWithContext()
 	goroutine.ReadFromClosedChannel()
 	goroutine.WorkerTimeoutWithContext()
+
+	// Goroutine - Producer and Consumer
+	goroutine.ProducerConsumer()
 }
