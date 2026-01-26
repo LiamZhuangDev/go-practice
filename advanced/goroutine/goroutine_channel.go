@@ -43,6 +43,7 @@ func BufferedChannelExample() {
 	}
 }
 
+// Fan-Out pattern with buffered channel: distribute work from the same channel to multiple workers.
 func FanOutWorkersWithBufferedChannel() {
 	ch := make(chan int, 3)
 

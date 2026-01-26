@@ -72,6 +72,7 @@ func SelectWithTimeout() {
 	}
 }
 
+// Fan-In pattern: merge multiple channels into one using select and for loop
 func FanInChannels() { // Multiplexing channels using select and for loop
 	ch1 := make(chan int)
 	ch2 := make(chan string)
@@ -112,6 +113,26 @@ func FanInChannels() { // Multiplexing channels using select and for loop
 	}
 
 	fmt.Println("All channels closed, exiting loop.")
+}
+
+// Channel State    Receive blocks?    ok
+// Open, no value   yes                -
+// Open, has value  no                 true
+// Closed           never              false
+func ReadFromClosedChannel() {
+	ch := make(chan int)
+	close(ch)
+
+	select {
+	case val, ok := <-ch:
+		fmt.Println("Value:", val, "Open:", ok) // ok will be false
+	// case val := <-ch:
+	// 	for { // This would cause a infinite loop, as reading from a closed channel always returns the zero value
+	// 		fmt.Println("Value from closed channel:", val)
+	// 	}
+	default:
+		fmt.Println("No value received")
+	}
 }
 
 func WorkerGracefulShutdownWithDoneSignal() {
@@ -181,22 +202,34 @@ func WorkerGracefulShutdownWithContext() {
 	wg.Wait()
 }
 
-// Channel State    Receive blocks?    ok
-// Open, no value   yes                -
-// Open, has value  no                 true
-// Closed           never              false
-func ReadFromClosedChannel() {
+func WorkerTimeoutWithContext() {
 	ch := make(chan int)
-	close(ch)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel() // Ensure resources are cleaned up
+
+	go func() {
+		time.Sleep(2 * time.Second)
+
+		// if ctx.Err() != nil {
+		// 	fmt.Println("Goroutine: context timed out, not sending to channel.")
+		// 	return
+		// }
+
+		ch <- 1 // Goroutine leaks: ch is unbuffered channel, it's blocking here and it's waiting for the receiver but receiver doesn't exist anymore as the context is already timed out
+
+		fmt.Println("Goroutine leaks: this will never be hit without if block above.")
+	}()
 
 	select {
 	case val, ok := <-ch:
-		fmt.Println("Value:", val, "Open:", ok) // ok will be false
-	// case val := <-ch:
-	// 	for { // This would cause a infinite loop, as reading from a closed channel always returns the zero value
-	// 		fmt.Println("Value from closed channel:", val)
-	// 	}
-	default:
-		fmt.Println("No value received")
+		if !ok {
+			fmt.Println("Channel closed.")
+			return
+		}
+		fmt.Println("Received:", val)
+	case <-ctx.Done():
+		fmt.Println("Timeout reached, exiting.")
 	}
+
+	time.Sleep(2 * time.Second) // Just for Goroutine leaks demostration
 }

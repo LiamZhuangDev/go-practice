@@ -271,4 +271,5 @@ func main() {
 	goroutine.WorkerGracefulShutdownWithDoneSignal()
 	goroutine.WorkerGracefulShutdownWithContext()
 	goroutine.ReadFromClosedChannel()
+	goroutine.WorkerTimeoutWithContext()
 }
