@@ -215,9 +215,11 @@ func WorkerTimeoutWithContext() {
 		// 	return
 		// }
 
-		ch <- 1 // Goroutine leaks: ch is unbuffered channel, it's blocking here and it's waiting for the receiver but receiver doesn't exist anymore as the context is already timed out
+		// Goroutine leaks: ch is unbuffered channel, it's blocking here and it's waiting for the receiver but receiver doesn't exist anymore as the context is already timed out
+		// This can also resolved by using a buffered channel as send completes immediately and goroutine exits without leaking
+		ch <- 1
 
-		fmt.Println("Goroutine leaks: this will never be hit without if block above.")
+		fmt.Println("Goroutine leaks: this will never be hit without if-block or buffered channel. see comment above.")
 	}()
 
 	select {
