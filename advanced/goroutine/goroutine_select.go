@@ -69,3 +69,45 @@ func SelectWithTimeout() {
 		fmt.Println("Timeout: No message received within 2 seconds")
 	}
 }
+
+func FanInChannels() { // Multiplexing channels using select and for loop
+	ch1 := make(chan int)
+	ch2 := make(chan string)
+
+	// Producer goroutines
+	go func() {
+		for i := range 5 {
+			ch1 <- i
+			time.Sleep(100 * time.Millisecond)
+		}
+		close(ch1)
+	}()
+
+	go func() {
+		for i := range 3 {
+			ch2 <- fmt.Sprintf("Msg %d", i)
+			time.Sleep(150 * time.Millisecond)
+		}
+		close(ch2)
+	}()
+
+	// Consumer loop using select to read from both channels
+	for ch1 != nil || ch2 != nil {
+		select {
+		case val, ok := <-ch1:
+			if !ok {
+				ch1 = nil // Set to nil to disable this case
+			} else {
+				fmt.Println("Received from ch1:", val)
+			}
+		case msg, ok := <-ch2:
+			if !ok {
+				ch2 = nil
+			} else {
+				fmt.Println("Received from ch2:", msg)
+			}
+		}
+	}
+
+	fmt.Println("All channels closed, exiting loop.")
+}

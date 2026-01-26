@@ -267,4 +267,5 @@ func main() {
 	goroutine.SelectBasis()
 	goroutine.SelectNonBlockingWithDefault()
 	goroutine.SelectWithTimeout()
+	goroutine.FanInChannels()
 }
