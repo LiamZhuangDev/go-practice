@@ -43,7 +43,7 @@ func BufferedChannelExample() {
 	}
 }
 
-func BufferedChannelExample2() {
+func FanOutWorkersWithBufferedChannel() {
 	ch := make(chan int, 3)
 
 	var wg sync.WaitGroup

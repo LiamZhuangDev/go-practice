@@ -3,7 +3,9 @@
 package goroutine
 
 import (
+	"context"
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -110,4 +112,71 @@ func FanInChannels() { // Multiplexing channels using select and for loop
 	}
 
 	fmt.Println("All channels closed, exiting loop.")
+}
+
+func WorkerGracefulShutdownWithDoneSignal() {
+	jobs := make(chan int)
+	done := make(chan bool)
+
+	// Worker goroutine
+	go func() {
+		for {
+			select {
+			case job, ok := <-jobs:
+				if !ok {
+					fmt.Println("Jobs channel closed.")
+				} else {
+					fmt.Println("Processing job:", job)
+					time.Sleep(500 * time.Millisecond) // Simulate work
+				}
+			case <-done:
+				fmt.Println("Received done signal, worker exiting.")
+				return // No leaked goroutine
+			}
+		}
+	}()
+
+	// Send jobs
+	for i := range 5 {
+		jobs <- i
+	}
+	close(jobs)  // Close jobs channel to signal no more jobs
+	done <- true // Send done signal
+	time.Sleep(1 * time.Second)
+}
+
+func WorkerGracefulShutdownWithContext() {
+	jobs := make(chan int)
+	ctx, cancel := context.WithCancel(context.Background())
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	// Worker goroutine
+	go func() {
+		defer wg.Done()
+		for {
+			select {
+			case job, ok := <-jobs:
+				if !ok {
+					fmt.Println("Jobs channel closed.")
+				} else {
+					fmt.Println("Processing job:", job)
+					time.Sleep(500 * time.Millisecond) // Simulate work
+				}
+			case <-ctx.Done():
+				fmt.Println("Received done signal, worker exiting.")
+				return // No leaked goroutine
+			}
+		}
+	}()
+
+	// Send jobs
+	for i := range 5 {
+		jobs <- i
+	}
+	close(jobs) // Close jobs channel to signal no more jobs
+	cancel()    // Cancel context to signal done
+
+	wg.Wait()
 }

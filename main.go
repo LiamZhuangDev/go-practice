@@ -261,11 +261,13 @@ func main() {
 	// Goroutine - Channel examples
 	goroutine.UnbufferedChannelExample()
 	goroutine.BufferedChannelExample()
-	goroutine.BufferedChannelExample2()
+	goroutine.FanOutWorkersWithBufferedChannel()
 
 	// Goroutine - Select example
 	goroutine.SelectBasis()
 	goroutine.SelectNonBlockingWithDefault()
 	goroutine.SelectWithTimeout()
 	goroutine.FanInChannels()
+	goroutine.WorkerGracefulShutdownWithDoneSignal()
+	goroutine.WorkerGracefulShutdownWithContext()
 }
