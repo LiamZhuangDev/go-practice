@@ -2,6 +2,7 @@ package goroutine
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -40,4 +41,37 @@ func BufferedChannelExample() {
 	for msg := range ch {
 		fmt.Println("Received: ", msg)
 	}
+}
+
+func BufferedChannelExample2() {
+	ch := make(chan int, 3)
+
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	// Consumers
+	go func() {
+		defer wg.Done()
+		for v := range ch {
+			fmt.Println("Routine1 received: ", v)
+			time.Sleep(time.Second)
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		for v := range ch {
+			fmt.Println("Routine2 received: ", v)
+			time.Sleep(time.Second)
+		}
+	}()
+
+	// Producer
+	for i := range 40 {
+		ch <- i
+		fmt.Println("Sent: ", i)
+	}
+
+	close(ch) // Producer closes the channel to signal no more values will be sent
+	wg.Wait() // Wait for both consumers to finish
 }

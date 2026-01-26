@@ -261,4 +261,5 @@ func main() {
 	// Goroutine - Channel examples
 	goroutine.UnbufferedChannelExample()
 	goroutine.BufferedChannelExample()
+	goroutine.BufferedChannelExample2()
 }
