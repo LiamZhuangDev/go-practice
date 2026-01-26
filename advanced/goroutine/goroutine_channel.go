@@ -16,7 +16,26 @@ func UnbufferedChannelExample() {
 		ch <- "World"
 	}()
 
-	time.Sleep(3000 * time.Millisecond)
+	time.Sleep(1000 * time.Millisecond)
+
+	for msg := range ch {
+		fmt.Println("Received: ", msg)
+	}
+}
+
+// A buffered channel provides asynchronous communication between goroutines.
+// A send on a buffered channel blocks only when the buffer is full, and a receive blocks only when the buffer is empty.
+func BufferedChannelExample() {
+	ch := make(chan string, 2) // Buffered channel with capacity of 2, which allows 2 messages to be sent without blocking.
+
+	go func() {
+		ch <- "Hello"
+		ch <- "World"
+		ch <- "From Buffered Channel"
+		close(ch)
+	}()
+
+	time.Sleep(1000 * time.Millisecond)
 
 	for msg := range ch {
 		fmt.Println("Received: ", msg)

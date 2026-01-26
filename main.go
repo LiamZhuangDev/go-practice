@@ -258,6 +258,7 @@ func main() {
 	// Goroutine Basis - WaitGroup example
 	goroutine.WaitGroupExampe()
 
-	// Goroutine - Channel example
+	// Goroutine - Channel examples
 	goroutine.UnbufferedChannelExample()
+	goroutine.BufferedChannelExample()
 }
