@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	concurrency "go-practice/advanced/concurrency"
 	goroutine "go-practice/advanced/goroutine"
 	interface_example "go-practice/advanced/interface"
 	account "go-practice/basics/account"
@@ -276,4 +277,8 @@ func main() {
 	// Goroutine - Producer and Consumer
 	goroutine.FanOut()
 	goroutine.FanInOut()
+
+	// Concurrency - Mutex
+	concurrency.MutexExample()
+	concurrency.RWMutex()
 }
