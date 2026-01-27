@@ -23,7 +23,7 @@ func consumer(ch <-chan int, id int, wg *sync.WaitGroup) { // wg is shared state
 	}
 }
 
-func ProducerConsumer() {
+func FanOut() {
 	ch := make(chan int, 5)
 	numConsumers := 3
 

@@ -274,5 +274,6 @@ func main() {
 	goroutine.WorkerTimeoutWithContext()
 
 	// Goroutine - Producer and Consumer
-	goroutine.ProducerConsumer()
+	goroutine.FanOut()
+	goroutine.FanInOut()
 }
