@@ -169,3 +169,52 @@ func repo2(ctx context.Context) error {
 func ContextWithValueAndCancel() {
 	handler2(context.Background())
 }
+
+// CascadeCancellation
+func ContextWithCascadeCancel() {
+	parentCtx, parentCancel := context.WithCancel(context.Background())
+
+	child1Ctx, child1Cancel := context.WithCancel(parentCtx)
+	defer child1Cancel()
+
+	child2Ctx, child2Cancel := context.WithCancel(parentCtx)
+	defer child2Cancel()
+
+	go func() {
+		time.Sleep(1 * time.Second)
+		parentCancel()
+	}()
+
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	go func(ctx context.Context) {
+		defer wg.Done()
+		for {
+			select {
+			case <-ctx.Done():
+				fmt.Println("Worker1 canceled")
+				return
+			default:
+				fmt.Println("Worker1 working...")
+				time.Sleep(200 * time.Millisecond)
+			}
+		}
+	}(child1Ctx)
+
+	go func(ctx context.Context) {
+		defer wg.Done()
+		for {
+			select {
+			case <-ctx.Done():
+				fmt.Println("Worker2 canceled")
+				return
+			default:
+				fmt.Println("Worker2 working...")
+				time.Sleep(200 * time.Millisecond)
+			}
+		}
+	}(child2Ctx)
+
+	wg.Wait()
+}

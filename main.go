@@ -288,4 +288,5 @@ func main() {
 	concurrency.ContextWithDeadline()
 	concurrency.ContextWithValue()
 	concurrency.ContextWithValueAndCancel()
+	concurrency.ContextWithCascadeCancel()
 }
