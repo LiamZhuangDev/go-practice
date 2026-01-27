@@ -87,3 +87,85 @@ func ContextWithDeadline() {
 
 	time.Sleep(3 * time.Second)
 }
+
+// context.WithValue is for request-scoped metadata that flows through APIs, not for passing real data.
+// This example follows handle - service - repo structure
+type reqIDKeyType struct{} // unexported, unique key
+
+var reqIDKey = reqIDKeyType{}
+
+func handler(ctx context.Context) {
+	// attach value
+	ctx = context.WithValue(ctx, reqIDKey, "req-123")
+
+	service(ctx)
+}
+
+func service(ctx context.Context) {
+	repo(ctx)
+}
+
+func repo(ctx context.Context) {
+	// retrieve value
+	if id, ok := ctx.Value(reqIDKey).(string); ok {
+		fmt.Println("request id: ", id)
+	}
+}
+
+func ContextWithValue() {
+	handler(context.Background())
+}
+
+// context.WithValue, together with cancellation
+func handler2(ctx context.Context) {
+	// attach value
+	ctx = context.WithValue(ctx, reqIDKey, "req-456")
+
+	// add cancellation
+	ctx, cancel := context.WithCancel(ctx)
+
+	go func() {
+		time.Sleep(1 * time.Second)
+		cancel()
+	}()
+
+	fmt.Println("handler start")
+
+	err := service2(ctx)
+	if err != nil {
+		fmt.Println("handler exit: ", err)
+	}
+
+	fmt.Println("handler done")
+}
+
+func service2(ctx context.Context) error {
+	if id, ok := ctx.Value(reqIDKey).(string); ok {
+		fmt.Println("service request id: ", id)
+	}
+
+	return repo2(ctx)
+}
+
+func repo2(ctx context.Context) error {
+	if id, ok := ctx.Value(reqIDKey).(string); ok {
+		fmt.Println("repo request id: ", id)
+	}
+
+	for range 5 {
+		select {
+		case <-ctx.Done():
+			fmt.Println("repo canceled: ", ctx.Err())
+			return ctx.Err()
+		default:
+			fmt.Println("repo working...")
+			time.Sleep(400 * time.Millisecond)
+		}
+	}
+
+	return nil
+}
+
+func ContextWithValueAndCancel() {
+	handler2(context.Background())
+}

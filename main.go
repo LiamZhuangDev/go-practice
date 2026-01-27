@@ -286,4 +286,6 @@ func main() {
 	concurrency.ContextWithCancel()
 	concurrency.ContextWithTimeout()
 	concurrency.ContextWithDeadline()
+	concurrency.ContextWithValue()
+	concurrency.ContextWithValueAndCancel()
 }
