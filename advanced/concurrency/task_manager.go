@@ -103,7 +103,7 @@ func ioTask(ctx context.Context) error {
 	return nil
 }
 
-func TaskManagerMain() {
+func TaskManagerTest() {
 	tm := NewTaskManager(3 * time.Second)
 
 	tm.Start("compute", computeTask)

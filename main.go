@@ -292,5 +292,6 @@ func main() {
 	concurrency.ContextInPipeline()
 
 	// Concurrency - Task Manager
-	concurrency.TaskManagerMain()
+	concurrency.TaskManagerTest()
+	concurrency.SafeCounterTest()
 }
