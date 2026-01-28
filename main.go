@@ -291,7 +291,8 @@ func main() {
 	concurrency.ContextWithCascadeCancel()
 	concurrency.ContextInPipeline()
 
-	// Concurrency - Task Manager
+	// Concurrency - Practice
 	concurrency.TaskManagerTest()
 	concurrency.SafeCounterTest()
+	concurrency.WorkerPoolTest()
 }

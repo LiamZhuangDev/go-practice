@@ -3,6 +3,7 @@
 package concurrency
 
 import (
+	"context"
 	"fmt"
 	"sync"
 	"time"
@@ -10,12 +11,22 @@ import (
 
 type Job int
 
-func worker(id int, jobs <-chan Job, wg *sync.WaitGroup) {
+func worker(ctx context.Context, id int, jobs <-chan Job, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	for job := range jobs {
-		fmt.Printf("worker %d processing job %d\n", id, job)
-		time.Sleep(100 * time.Millisecond)
+	for {
+		select {
+		case <-ctx.Done():
+			fmt.Printf("job canceled, worker %d exiting\n", id)
+			return
+		case job, ok := <-jobs:
+			if !ok {
+				fmt.Printf("jobs closed, worker %d exiting\n", id)
+				return
+			}
+			fmt.Printf("worker %d processing job %d\n", id, job)
+			time.Sleep(500 * time.Millisecond)
+		}
 	}
 }
 
@@ -24,16 +35,31 @@ func WorkerPoolTest() {
 	const jobCount = 10
 	jobs := make(chan Job)
 	var wg sync.WaitGroup
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	// start workers
 	for i := range workerCount {
 		wg.Add(1)
-		go worker(i, jobs, &wg)
+		go worker(ctx, i, jobs, &wg)
 	}
 
+	// cancel jobs after 1 second
+	go func() {
+		time.Sleep(time.Second)
+		cancel()
+	}()
+
 	// submit jobs
+jobLoop:
 	for j := range jobCount {
-		jobs <- Job(j)
+		select {
+		case jobs <- Job(j):
+			fmt.Printf("submitted job %d\n", j)
+		case <-ctx.Done():
+			fmt.Println("canceling jobs...")
+			break jobLoop
+		}
 	}
 	close(jobs)
 
