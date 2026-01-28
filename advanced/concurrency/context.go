@@ -259,26 +259,14 @@ func ContextInPipeline() {
 		go func() {
 			defer close(out)
 
-			for {
+			for val := range in {
 				select {
 				case <-ctx.Done():
 					fmt.Println("Pipeline canceled while updating data")
 					return
-				case val, ok := <-in:
-					if !ok {
-						fmt.Println("upstream closed")
-						return
-					}
-
-					result := val * 2
+				case out <- val * 2:
 					time.Sleep(10 * time.Millisecond)
-
-					select {
-					case <-ctx.Done():
-						return
-					case out <- result:
-						fmt.Printf("Update %d to %d\n", val, result)
-					}
+					fmt.Printf("Update %d to %d\n", val, val*2)
 				}
 			}
 		}()
