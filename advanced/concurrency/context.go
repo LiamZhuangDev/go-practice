@@ -27,7 +27,11 @@ func ContextWithCancel() {
 		for {
 			select {
 			case <-ctx.Done():
-				fmt.Println("Received done signal, exiting.")
+				if ctx.Err() == context.DeadlineExceeded {
+					fmt.Println("Timed out, exiting")
+				} else if ctx.Err() == context.Canceled {
+					fmt.Println("Canceled, exiting")
+				}
 				return
 			default:
 				fmt.Println("Working...")
@@ -56,7 +60,11 @@ func ContextWithTimeout() {
 		for {
 			select {
 			case <-ctx.Done():
-				fmt.Println("Timed out, exiting")
+				if ctx.Err() == context.DeadlineExceeded {
+					fmt.Println("Timed out, exiting")
+				} else if ctx.Err() == context.Canceled {
+					fmt.Println("Canceled, exiting")
+				}
 				return
 			default:
 				fmt.Println("Working...")
