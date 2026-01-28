@@ -10,6 +10,7 @@ package concurrency
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"sync"
 	"time"
 )
@@ -217,4 +218,78 @@ func ContextWithCascadeCancel() {
 	}(child2Ctx)
 
 	wg.Wait()
+}
+
+func ContextInPipeline() {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	go func() {
+		time.Sleep(1 * time.Second)
+		cancel()
+	}()
+
+	// Generate data
+	data := func(ctx context.Context) <-chan int {
+		ch := make(chan int)
+
+		go func() {
+			defer close(ch)
+
+			for {
+				n := rand.Intn(100)
+				select {
+				case <-ctx.Done():
+					fmt.Println("Pipeline canceled while generating data")
+					return
+				case ch <- n:
+					fmt.Println("Generates: ", n)
+					time.Sleep(5 * time.Millisecond)
+				}
+			}
+		}()
+
+		return ch
+	}(ctx)
+
+	// Transform data
+	transformed := func(ctx context.Context, in <-chan int) <-chan int {
+		out := make(chan int)
+
+		go func() {
+			defer close(out)
+
+			for {
+				select {
+				case <-ctx.Done():
+					fmt.Println("Pipeline canceled while updating data")
+					return
+				case val, ok := <-in:
+					if !ok {
+						fmt.Println("upstream closed")
+						return
+					}
+
+					result := val * 2
+					time.Sleep(10 * time.Millisecond)
+
+					select {
+					case <-ctx.Done():
+						return
+					case out <- result:
+						fmt.Printf("Update %d to %d\n", val, result)
+					}
+				}
+			}
+		}()
+
+		return out
+	}(ctx, data)
+
+	// Consume data
+	for val := range transformed {
+		fmt.Println("Pipeline output: ", val)
+	}
+
+	fmt.Println("Pipeline shutdown")
 }

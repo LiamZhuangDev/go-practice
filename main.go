@@ -289,4 +289,5 @@ func main() {
 	concurrency.ContextWithValue()
 	concurrency.ContextWithValueAndCancel()
 	concurrency.ContextWithCascadeCancel()
+	concurrency.ContextInPipeline()
 }
