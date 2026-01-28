@@ -2,6 +2,7 @@
 // The APIs contains:
 // NewTaskManager() - constructor
 // Start(string, task) - start a task
+// StartWithTimeout(string, task, time.Duration) - start a task with timeout
 // CancelAll() - cancel all running tasks
 // Wait() - wait all tasks complete
 
@@ -42,6 +43,24 @@ func (tm *TaskManager) Start(name string, task Task) {
 		}
 
 		fmt.Printf("[%s] completed successfully\n", name)
+	}()
+}
+
+func (tm *TaskManager) StartWithTimeout(name string, task Task, timeout time.Duration) {
+	tm.wg.Add(1)
+
+	go func() {
+		defer tm.wg.Done()
+
+		ctx, cancel := context.WithTimeout(tm.ctx, timeout)
+		defer cancel()
+
+		if err := task(ctx); err != nil {
+			fmt.Printf("[%s] failed: %v\n", name, err)
+			return
+		}
+
+		fmt.Printf("[%s] compeleted successfully\n", name)
 	}()
 }
 
@@ -88,14 +107,14 @@ func TaskManagerMain() {
 	tm := NewTaskManager(3 * time.Second)
 
 	tm.Start("compute", computeTask)
-	tm.Start("io", ioTask)
+	tm.StartWithTimeout("io", ioTask, time.Second)
 
 	cancel := true
 	if cancel {
 		time.Sleep(2 * time.Second)
 		tm.CancelAll()
 	} else {
-		// timeout after 3 seconds
+		// timeout after 3 seconds or earlier (timeout specified in StartWithTimeout)
 	}
 
 	tm.Wait()
