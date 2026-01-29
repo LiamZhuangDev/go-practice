@@ -301,4 +301,5 @@ func main() {
 	std.JSONTest()
 	std.FileRWTest()
 	std.TimeTest()
+	std.HashTest()
 }
