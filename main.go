@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	concurrency "go-practice/advanced/concurrency"
 	goroutine "go-practice/advanced/goroutine"
 	interface_example "go-practice/advanced/interface"
 	account "go-practice/basics/account"
@@ -259,44 +260,45 @@ func main() {
 	// Goroutine Basis - WaitGroup example
 	goroutine.WaitGroupExampe()
 
-	// // Goroutine - Channel examples
-	// goroutine.UnbufferedChannelExample()
-	// goroutine.BufferedChannelExample()
-	// goroutine.FanOutWorkersWithBufferedChannel()
+	// Goroutine - Channel examples
+	goroutine.UnbufferedChannelExample()
+	goroutine.BufferedChannelExample()
+	goroutine.FanOutWorkersWithBufferedChannel()
 
-	// // Goroutine - Select example
-	// goroutine.SelectBasis()
-	// goroutine.SelectNonBlockingWithDefault()
-	// goroutine.SelectWithTimeout()
-	// goroutine.FanInChannels()
-	// goroutine.WorkerGracefulShutdownWithDoneSignal()
-	// goroutine.WorkerGracefulShutdownWithContext()
-	// goroutine.ReadFromClosedChannel()
-	// goroutine.WorkerTimeoutWithContext()
+	// Goroutine - Select example
+	goroutine.SelectBasis()
+	goroutine.SelectNonBlockingWithDefault()
+	goroutine.SelectWithTimeout()
+	goroutine.FanInChannels()
+	goroutine.WorkerGracefulShutdownWithDoneSignal()
+	goroutine.WorkerGracefulShutdownWithContext()
+	goroutine.ReadFromClosedChannel()
+	goroutine.WorkerTimeoutWithContext()
 
-	// // Goroutine - Producer and Consumer
-	// goroutine.FanOut()
-	// goroutine.FanInOut()
+	// Goroutine - Producer and Consumer
+	goroutine.FanOut()
+	goroutine.FanInOut()
 
-	// // Concurrency - Mutex
-	// concurrency.MutexExample()
-	// concurrency.RWMutex()
+	// Concurrency - Mutex
+	concurrency.MutexExample()
+	concurrency.RWMutex()
 
-	// // Concurrency - Context
-	// concurrency.ContextWithCancel()
-	// concurrency.ContextWithTimeout()
-	// concurrency.ContextWithDeadline()
-	// concurrency.ContextWithValue()
-	// concurrency.ContextWithValueAndCancel()
-	// concurrency.ContextWithCascadeCancel()
-	// concurrency.ContextInPipeline()
+	// Concurrency - Context
+	concurrency.ContextWithCancel()
+	concurrency.ContextWithTimeout()
+	concurrency.ContextWithDeadline()
+	concurrency.ContextWithValue()
+	concurrency.ContextWithValueAndCancel()
+	concurrency.ContextWithCascadeCancel()
+	concurrency.ContextInPipeline()
 
-	// // Concurrency - Practice
-	// concurrency.TaskManagerTest()
-	// concurrency.SafeCounterTest()
-	// concurrency.WorkerPoolTest()
+	// Concurrency - Practice
+	concurrency.TaskManagerTest()
+	concurrency.SafeCounterTest()
+	concurrency.WorkerPoolTest()
 
 	// Std - JSON
-	// std.JSONTest()
+	std.JSONTest()
 	std.FileRWTest()
+	std.TimeTest()
 }
