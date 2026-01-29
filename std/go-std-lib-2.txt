@@ -1,0 +1,2 @@
+line1: Hello World!
+line2: From bufio.Writer
