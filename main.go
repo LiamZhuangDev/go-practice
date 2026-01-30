@@ -257,6 +257,9 @@ func main() {
 		fmt.Printf("PostgreSQL Query Result: %v\n", result)
 	}
 
+	// Interface - Payment
+	interface_example.PaymentTest()
+
 	// Goroutine Basis - WaitGroup example
 	goroutine.WaitGroupExampe()
 
