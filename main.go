@@ -300,6 +300,7 @@ func main() {
 	concurrency.SafeCounterTest()
 	concurrency.WorkerPoolTest()
 	concurrency.WebCrawlerTest()
+	concurrency.LoggerTest()
 
 	// Std - JSON
 	std.JSONTest()
